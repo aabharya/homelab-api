@@ -1,0 +1,79 @@
+[project]
+name = "druidlab-api"
+version = "0.1.0"
+description = "DruidLab Home Lab Automation"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx",
+    "ruff>=0.11",
+    "rich>=15.0.0",
+    "pydantic-settings>=2.14.2",
+    "tapo>=0.9.0",
+    "bleak>=3.0.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+exclude = [
+    '.eggs',
+    '.git',
+    '.ipynb_checkpoints',
+    '.mypy_cache',
+    '.nox',
+    '.pants.d',
+    '.pyenv',
+    '.pytest_cache',
+    '.pytype',
+    '.ruff_cache',
+    '.tox',
+    '.venv',
+    '.vscode',
+    '__pypackages__',
+    '_build',
+    'build',
+    'dist',
+    'node_modules',
+    'migrations',
+    'settings',
+    'site-packages',
+    'venv',
+    'e2e'
+]
+extend-exclude = ['e2e/*.py']
+include = ['*.py']
+line-length = 120
+output-format = 'grouped'
+target-version = 'py312'
+
+[tool.ruff.lint]
+select = [
+  'S', # https://docs.astral.sh/ruff/rules/#flake8-bandit-s
+  'SIM', # https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
+  'C4', # https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
+  'E', # https://docs.astral.sh/ruff/rules/#error-e
+  'F', # https://docs.astral.sh/ruff/rules/#pyflakes-f
+  'BLE', # https://docs.astral.sh/ruff/rules/#flake8-blind-except-ble
+  'I', # https://docs.astral.sh/ruff/rules/#isort-i
+  'B', # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+  'N', # https://docs.astral.sh/ruff/rules/#pep8-naming-n
+  'ERA' # https://docs.astral.sh/ruff/rules/#eradicate-era
+]
+ignore = [
+  'E501', # https://docs.astral.sh/ruff/rules/line-too-long/
+  'N806' # https://docs.astral.sh/ruff/rules/non-lowercase-variable-in-function/
+]
+fixable = ['I']
+
+[tool.ruff.lint.per-file-ignores]
+'__init__.py' = ['F401']
+'*test*.py' = ['S']
+
+[tool.ruff.format]
+quote-style = 'single'
+docstring-code-format = true
+
