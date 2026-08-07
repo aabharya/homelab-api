@@ -1,14 +1,12 @@
-import asyncio
-
 from homelab_api import devices
 from homelab_api.configs import settings
-from homelab_api.devices.fields import Device
+from homelab_api.devices.base import Device
 from homelab_api.events.bus import event_handler
 from homelab_api.events.enums import EventName
 from homelab_api.loggings import get_logger
 
 from . import services
-from .protocols import ActionResult, AutomationResult, BaseAutomation
+from .protocols import AutomationResult, BaseAutomation
 
 logger = get_logger('automations')
 
@@ -32,17 +30,6 @@ class GamingModeEnableAutomation(BaseAutomation):
             self.ubuntu_laptop.play_music(music),
         ]
         await self.run_parallel(*tasks)
-
-        self.actions.extend(
-            [
-                ActionResult(device='mikrotik', action='gaming_on', success=True),
-                ActionResult(device='tapo', action='turn_off', success=True),
-                ActionResult(device='pixoo', action='display_update', success=True),
-                ActionResult(device='led', action='scene_fire', success=True),
-                ActionResult(device='ubuntu_laptop', action='play_music', success=True),
-                ActionResult(device='led', action='scene_gradient', success=True),
-            ]
-        )
 
         return AutomationResult(automation=self.__class__.__name__, handled=True, actions=self.actions)
 
@@ -71,17 +58,6 @@ class GamingModeDisableAutomation(BaseAutomation):
         ]
         await self.run_parallel(*tasks)
 
-        self.actions.extend(
-            [
-                ActionResult(device='mikrotik', action='gaming_off', success=True),
-                ActionResult(device='tapo', action='turn_on', success=True),
-                ActionResult(device='pixoo', action='display_update', success=True),
-                ActionResult(device='led', action='scene_fire', success=True),
-                ActionResult(device='ubuntu_laptop', action='play_music', success=True),
-                ActionResult(device='led', action='scene_gradient', success=True),
-            ]
-        )
-
         return AutomationResult(automation=self.__class__.__name__, handled=True, actions=self.actions)
 
 
@@ -90,15 +66,8 @@ class AlexaHelloWorldAutomation(BaseAutomation):
     pixoo = Device(devices.pixoo_device)
 
     async def handle_event(self):
-        pixoo_task = asyncio.create_task(self.pixoo.show_alexa_hello_world())
-        await asyncio.gather(pixoo_task, return_exceptions=True)
-
-        self.actions.extend(
-            [
-                ActionResult(device='pixoo', action='display_update', success=True),
-            ]
-        )
-
+        result = await self.pixoo.show_alexa_hello_world()
+        self.actions.append(result)
         return AutomationResult(automation=self.__class__.__name__, handled=True, actions=self.actions)
 
 
@@ -112,13 +81,6 @@ class DotaHeroKillAutomation(BaseAutomation):
         tasks = [self.pixoo.show_dota_kill(), self.ubuntu_laptop.play_music(music)]
         await self.run_parallel(*tasks)
 
-        self.actions.extend(
-            [
-                ActionResult(device='pixoo', action='display_update', success=True),
-                ActionResult(device='ubuntu_laptop', action='play_music', success=True),
-            ]
-        )
-
         return AutomationResult(automation=self.__class__.__name__, handled=True, actions=self.actions)
 
 
@@ -131,12 +93,5 @@ class DotaHeroDeathAutomation(BaseAutomation):
         music = services.select_random_music(settings.DEATH_MUSIC_PATH)
         tasks = [self.pixoo.show_dota_death(), self.ubuntu_laptop.play_music(music)]
         await self.run_parallel(*tasks)
-
-        self.actions.extend(
-            [
-                ActionResult(device='pixoo', action='display_update', success=True),
-                ActionResult(device='ubuntu_laptop', action='play_music', success=True),
-            ]
-        )
 
         return AutomationResult(automation=self.__class__.__name__, handled=True, actions=self.actions)

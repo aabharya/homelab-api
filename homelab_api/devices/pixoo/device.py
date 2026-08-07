@@ -1,14 +1,17 @@
 import asyncio
 
 from homelab_api.configs import settings
+from homelab_api.devices.base import BaseDevice
+from homelab_api.devices.decorators import device_action
 
 from .client import PixooRestClient
 
 
-class PixooDevice:
+class PixooDevice(BaseDevice):
     def __init__(self):
         self.client = PixooRestClient(base_url=settings.PIXO_REST_URL)
 
+    @device_action
     async def show_gaming_mode_enable(self):
         await self.client.fill_black()
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
@@ -16,6 +19,7 @@ class PixooDevice:
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
         await self.client.show_text('GAMING MODE ON!', r=255, g=0, b=0)
 
+    @device_action
     async def show_gaming_mode_disable(self):
         await self.client.fill_black()
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
@@ -24,6 +28,7 @@ class PixooDevice:
         await self.client.show_text('GAMING MODE OFF!', r=0, g=255, b=0)
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
 
+    @device_action
     async def show_alexa_hello_world(self):
         await self.client.fill_black()
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
@@ -31,6 +36,7 @@ class PixooDevice:
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
         await self.client.restore_default_clock_face()
 
+    @device_action
     async def show_dota_kill(self):
         await self.client.set_custom_clock_face(clock_face_id=1)
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
@@ -40,6 +46,7 @@ class PixooDevice:
         await asyncio.sleep(5)
         await self.client.restore_default_clock_face()
 
+    @device_action
     async def show_dota_death(self):
         await self.client.set_custom_clock_face(clock_face_id=0)
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
@@ -49,6 +56,7 @@ class PixooDevice:
         await asyncio.sleep(5)
         await self.client.restore_default_clock_face()
 
+    @device_action
     async def show_visualizer(self, delay: int | None = None):
         await self.client.set_clock_face(clock_face_id=2)
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
@@ -57,6 +65,7 @@ class PixooDevice:
             await self.client.restore_default_clock_face()
             await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
 
+    @device_action
     async def hide_visualizer(self):
         await asyncio.sleep(settings.PIXO_REQUEST_DELAY)
         await self.client.restore_default_clock_face()

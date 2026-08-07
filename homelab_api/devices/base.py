@@ -13,3 +13,9 @@ class Device(Generic[T]):
 
     def __get__(self, obj, owner) -> T:
         return self.instance
+
+
+class BaseDevice:
+    @property
+    def device_name(self):
+        return self.__class__.__name__.replace('Device', '').lower()

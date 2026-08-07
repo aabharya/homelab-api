@@ -24,7 +24,7 @@ class AutomationResult:
 
 
 class Automateable(Protocol):
-    async def handle(self) -> AutomationResult: ...
+    async def handle_event(self) -> AutomationResult: ...
 
 
 class BaseAutomation(Automateable):
@@ -38,6 +38,7 @@ class BaseAutomation(Automateable):
     async def run_parallel(self, *automation_tasks) -> tuple[BaseException | Any]:
         tasks = [asyncio.create_task(task) for task in automation_tasks]
         results = await asyncio.gather(*tasks, return_exceptions=True)
+        self.actions.extend(results)
         return results
 
     async def __call__(self) -> AutomationResult:
