@@ -8,7 +8,8 @@ from .client import UbuntuLaptopClient
 
 
 class UbuntuLaptopDevice(BaseDevice):
-    def __init__(self):
+    def __init__(self, serialize_actions=False):
+        super().__init__(serialize_actions)
         self.client = UbuntuLaptopClient(username=settings.UBUNTU_USERNAME, password=settings.UBUNTU_PASSWORD)
 
     @device_action

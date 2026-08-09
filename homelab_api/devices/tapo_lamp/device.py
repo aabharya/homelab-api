@@ -6,7 +6,8 @@ from .client import TapoClient
 
 
 class TapoLampDevice(BaseDevice):
-    def __init__(self):
+    def __init__(self, serialize_actions=False):
+        super().__init__(serialize_actions)
         self.client = TapoClient(settings.TAPO_USERNAME, settings.TAPO_PASSWORD, settings.TAPO_LIGHT_IP)
 
     @device_action

@@ -6,7 +6,8 @@ from .client import MikrotikClient
 
 
 class MikrotikDevice(BaseDevice):
-    def __init__(self):
+    def __init__(self, serialize_actions=False):
+        super().__init__(serialize_actions)
         self.client = MikrotikClient(
             username=settings.MIKROTIK_USERNAME, password=settings.MIKROTIK_PASSWORD, host=settings.MIKROTIK_HOST
         )

@@ -8,7 +8,8 @@ from .client import SP621EClient
 
 
 class BalanXLedDevice(BaseDevice):
-    def __init__(self):
+    def __init__(self, serialize_actions=False):
+        super().__init__(serialize_actions)
         self.client = SP621EClient(settings.BALANX_LED_MAC)
 
     @device_action

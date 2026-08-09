@@ -4,7 +4,7 @@ import shlex
 from asyncio import subprocess
 from pathlib import Path
 
-AUDIO_EXTENSIONS = {'.mp3', '.wav', '.ogg', '.flac', '.m4a', '.aac'}
+AUDIO_EXTENSIONS = {'.mp3', '.mp4', '.wav', '.ogg', '.flac', '.m4a', '.aac'}
 
 
 def select_random_music(directory: str) -> str:

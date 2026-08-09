@@ -8,7 +8,8 @@ from .client import PixooRestClient
 
 
 class PixooDevice(BaseDevice):
-    def __init__(self):
+    def __init__(self, serialize_actions=True):
+        super().__init__(serialize_actions)
         self.client = PixooRestClient(base_url=settings.PIXO_REST_URL)
 
     @device_action
@@ -79,4 +80,4 @@ class PixooDevice(BaseDevice):
             return {'status': 'error', 'error': str(exc)}
 
 
-pixoo_device = PixooDevice()
+pixoo_device = PixooDevice(serialize_actions=True)
